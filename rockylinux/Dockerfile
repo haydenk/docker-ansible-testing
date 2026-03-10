@@ -7,6 +7,7 @@ LABEL maintainer="Hayden King" distro=rockylinux version=${VERSION}
 
 ENV pip_packages="ansible"
 
+# hadolint ignore=DL3041
 RUN microdnf -y install rpm dnf dnf-plugins-core \
  && microdnf clean all \
  && dnf -y update \
@@ -31,6 +32,7 @@ RUN microdnf -y install rpm dnf dnf-plugins-core \
           /lib/systemd/system/basic.target.wants/* \
           /lib/systemd/system/anaconda.target.wants/*
 
+# hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir --upgrade pip $pip_packages \
  && sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers \
  && mkdir -p /etc/ansible \

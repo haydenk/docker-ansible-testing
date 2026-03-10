@@ -9,6 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV pip_packages="ansible"
 
+# hadolint ignore=DL3008,SC2016
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        apt-utils \
@@ -29,6 +30,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
 
+# hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir $pip_packages
 
 RUN mkdir -p /etc/ansible \

@@ -9,6 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV pip_packages="ansible cryptography"
 
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        sudo systemd systemd-sysv \
@@ -19,6 +20,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
     && apt-get clean
 
+# hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir --upgrade pip --break-system-packages \
  && pip3 install --no-cache-dir $pip_packages --break-system-packages
 

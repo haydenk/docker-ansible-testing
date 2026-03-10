@@ -8,6 +8,7 @@ LABEL maintainer="Hayden King" distro=amazonlinux version=${VERSION}
 ENV pip_packages="ansible"
 
 # Install systemd -- See https://hub.docker.com/_/centos/
+# hadolint ignore=DL3033
 RUN yum -y install rpm dnf-plugins-core \
  && yum -y update \
  && yum -y install \
@@ -28,6 +29,7 @@ RUN yum -y install rpm dnf-plugins-core \
           /lib/systemd/system/basic.target.wants/* \
           /lib/systemd/system/anaconda.target.wants/*
 
+# hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir $pip_packages \
  && sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers \
  && mkdir -p /etc/ansible \

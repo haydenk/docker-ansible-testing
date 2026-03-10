@@ -7,6 +7,7 @@ LABEL maintainer="Hayden King" distro=alpine version=${VERSION}
 
 ENV pip_packages="ansible"
 
+# hadolint ignore=DL3018,DL3013
 RUN apk --no-cache add \
       python3 \
       python3-dev \
