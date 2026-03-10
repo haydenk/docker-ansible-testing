@@ -8,6 +8,7 @@ LABEL maintainer="Hayden King" distro=rockylinux version=${VERSION}
 ENV pip_packages="ansible"
 
 RUN microdnf -y install rpm dnf dnf-plugins-core \
+ && microdnf clean all \
  && dnf -y update \
  && dnf -y install \
       epel-release \
@@ -30,10 +31,10 @@ RUN microdnf -y install rpm dnf dnf-plugins-core \
           /lib/systemd/system/basic.target.wants/* \
           /lib/systemd/system/anaconda.target.wants/*
 
-RUN pip3 install --upgrade pip $pip_packages \
+RUN pip3 install --no-cache-dir --upgrade pip $pip_packages \
  && sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers \
  && mkdir -p /etc/ansible \
- && echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+ && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/lib/systemd/systemd"]

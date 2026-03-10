@@ -1,3 +1,9 @@
 ignore:
+  - DL3003  # Use WORKDIR: not applicable inside subshells within RUN
   - DL3008  # Don't require pinned apt package versions in base images
+  - DL3013  # Don't require pinned pip package versions (want latest ansible)
+  - DL3018  # Don't require pinned apk package versions in base images
+  - DL3033  # Don't require pinned yum package versions in base images
+  - DL3041  # Don't require pinned dnf package versions in base images
   - DL3059  # Multiple consecutive RUN instructions is intentional for layer clarity
+  - SC2016  # Single-quote false positive: $-patterns inside sed expressions are not variables

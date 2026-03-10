@@ -29,10 +29,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
 
-RUN pip3 install $pip_packages
+RUN pip3 install --no-cache-dir $pip_packages
 
 RUN mkdir -p /etc/ansible \
- && echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts \
+ && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts \
  && rm -f /lib/systemd/system/systemd*udev* \
  && rm -f /lib/systemd/system/getty.target
 

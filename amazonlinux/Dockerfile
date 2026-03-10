@@ -28,10 +28,10 @@ RUN yum -y install rpm dnf-plugins-core \
           /lib/systemd/system/basic.target.wants/* \
           /lib/systemd/system/anaconda.target.wants/*
 
-RUN pip3 install $pip_packages \
+RUN pip3 install --no-cache-dir $pip_packages \
  && sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers \
  && mkdir -p /etc/ansible \
- && echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+ && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/lib/systemd/systemd"]

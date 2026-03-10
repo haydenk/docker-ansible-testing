@@ -18,8 +18,8 @@ RUN apk --no-cache add \
       openssh-client \
       rsync \
       iproute2 \
- && pip3 install --break-system-packages $pip_packages \
+ && pip3 install --no-cache-dir --break-system-packages $pip_packages \
  && mkdir -p /etc/ansible \
- && echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
+ && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 
 CMD ["/bin/sh"]

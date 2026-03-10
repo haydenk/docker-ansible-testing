@@ -19,11 +19,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
     && apt-get clean
 
-RUN pip3 install --upgrade pip --break-system-packages \
- && pip3 install $pip_packages --break-system-packages
+RUN pip3 install --no-cache-dir --upgrade pip --break-system-packages \
+ && pip3 install --no-cache-dir $pip_packages --break-system-packages
 
 RUN mkdir -p /etc/ansible \
- && echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts \
+ && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts \
  && rm -f /lib/systemd/system/multi-user.target.wants/getty.target
 
 VOLUME ["/sys/fs/cgroup"]

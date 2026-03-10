@@ -22,7 +22,7 @@ jobs:
 
       - name: Set matrix
         id: set-matrix
-        run: echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+        run: echo "matrix=$(jq -c . matrix.json)" >> "$GITHUB_OUTPUT"
 
   release:
     name: ${{ matrix.distro }}:${{ matrix.version }}

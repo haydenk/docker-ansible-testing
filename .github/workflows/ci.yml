@@ -27,7 +27,7 @@ jobs:
 
       - name: Set matrix
         id: set-matrix
-        run: echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+        run: echo "matrix=$(jq -c . matrix.json)" >> "$GITHUB_OUTPUT"
 
   hadolint:
     name: Lint Dockerfile (${{ matrix.distro }})
@@ -62,7 +62,7 @@ jobs:
               line-length:
                 max: 120
               truthy:
-                allowed-values: ["true", "false"]
+                allowed-values: ["true", "false", "on"]
 
   build:
     name: Build ${{ matrix.distro }}:${{ matrix.version }}
