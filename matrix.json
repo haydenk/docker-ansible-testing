@@ -1,0 +1,18 @@
+[
+  { "distro": "debian",      "version": "trixie-slim",   "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "debian",      "version": "bookworm-slim", "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "debian",      "version": "bullseye-slim", "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "ubuntu",      "version": "noble",         "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "ubuntu",      "version": "jammy",         "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "ubuntu",      "version": "focal",         "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "fedora",      "version": "41",            "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "fedora",      "version": "40",            "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "fedora",      "version": "39",            "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "rockylinux",  "version": "9-minimal",     "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "rockylinux",  "version": "8-minimal",     "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "amazonlinux", "version": "2023",          "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "amazonlinux", "version": "2",             "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "alpine",      "version": "3.21",          "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "alpine",      "version": "3.20",          "platforms": "linux/amd64,linux/arm64" },
+  { "distro": "alpine",      "version": "3.19",          "platforms": "linux/amd64,linux/arm64" }
+]

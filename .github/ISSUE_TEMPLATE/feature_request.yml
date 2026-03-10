@@ -1,0 +1,54 @@
+name: Feature Request
+description: Suggest a new feature, distro, or improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to improve these images? Great — please share it! For general discussion, use [Discussions](https://github.com/haydenk/docker-ansible-testing/discussions) instead.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or motivation
+      description: What use case or frustration is this addressing?
+      placeholder: "It would be useful if the images included... / I can't test Ansible roles against..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you'd like to see. Be as specific as you can.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the project does this affect?
+      multiple: true
+      options:
+        - New distro / version
+        - Existing Dockerfile
+        - GitHub Actions / CI
+        - Release process
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you've thought about or workarounds you're currently using?
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Links, references, or anything else relevant.

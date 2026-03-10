@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - "feature/**"
+  pull_request:
+    branches:
+      - master
+      - develop
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
+  workflow_dispatch:
+
+jobs:
+  setup:
+    name: Load matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set matrix
+        id: set-matrix
+        run: echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+
+  hadolint:
+    name: Lint Dockerfile (${{ matrix.distro }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: ["debian", "ubuntu", "fedora", "rockylinux", "amazonlinux", "alpine"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        with:
+          dockerfile: ./${{ matrix.distro }}/Dockerfile
+
+  yamllint:
+    name: Lint YAML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Lint YAML
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3.1.1
+        with:
+          file_or_dir: .github/
+          config_data: |
+            extends: default
+            rules:
+              line-length:
+                max: 120
+              truthy:
+                allowed-values: ["true", "false"]
+
+  build:
+    name: Build ${{ matrix.distro }}:${{ matrix.version }}
+    runs-on: ubuntu-latest
+    needs: [setup, hadolint, yamllint]
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.setup.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
+
+      - name: Build
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        with:
+          context: ./${{ matrix.distro }}
+          platforms: ${{ matrix.platforms }}
+          push: false
+          build-args: VERSION=${{ matrix.version }}
+          cache-from: type=gha,scope=${{ matrix.distro }}-${{ matrix.version }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.distro }}-${{ matrix.version }}
+
+  test:
+    name: Test ${{ matrix.distro }}:${{ matrix.version }}
+    runs-on: ubuntu-latest
+    needs: [setup, build]
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.setup.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
+
+      - name: Build
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        with:
+          context: ./${{ matrix.distro }}
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: test/${{ matrix.distro }}:${{ matrix.version }}
+          build-args: VERSION=${{ matrix.version }}
+          cache-from: type=gha,scope=${{ matrix.distro }}-${{ matrix.version }}
+
+      - name: Verify ansible
+        run: docker run --rm test/${{ matrix.distro }}:${{ matrix.version }} ansible --version
+
+      - name: Verify python
+        run: docker run --rm test/${{ matrix.distro }}:${{ matrix.version }} python3 --version
+
+      - name: Verify inventory
+        run: docker run --rm test/${{ matrix.distro }}:${{ matrix.version }} test -f /etc/ansible/hosts

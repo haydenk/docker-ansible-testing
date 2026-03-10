@@ -1,0 +1,45 @@
+"debian":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "debian/**"
+
+"ubuntu":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "ubuntu/**"
+
+"fedora":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "fedora/**"
+
+"rockylinux":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "rockylinux/**"
+
+"amazonlinux":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "amazonlinux/**"
+
+"alpine":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "alpine/**"
+
+"ci/cd":
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/**"
+      - "matrix.json"
+
+"documentation":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "*.md"
+
+"dependencies":
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/dependabot.yml"

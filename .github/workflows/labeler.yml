@@ -1,0 +1,61 @@
+name: Labeler
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  label-pr:
+    name: Label PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: false
+
+  label-issue:
+    name: Label Issue
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const title = context.payload.issue.title.toLowerCase();
+            const body  = (context.payload.issue.body || '').toLowerCase();
+            const text  = title + ' ' + body;
+
+            const labels = [];
+
+            // Template-based labels are already applied via ISSUE_TEMPLATE labels: field.
+            // Add supplemental labels based on keywords.
+
+            if (/\bdebian\b/.test(text))                                      labels.push('debian');
+            if (/\bubuntu\b/.test(text))                                      labels.push('ubuntu');
+            if (/\bfedora\b/.test(text))                                      labels.push('fedora');
+            if (/\b(rocky|rockylinux)\b/.test(text))                          labels.push('rockylinux');
+            if (/\b(amazon|amazonlinux|al2|al2023)\b/.test(text))             labels.push('amazonlinux');
+            if (/\balpine\b/.test(text))                                      labels.push('alpine');
+            if (/\b(ansible|playbook|role|inventory)\b/.test(text))           labels.push('ansible');
+            if (/\b(docker|dockerfile|container|image|ghcr|buildx)\b/.test(text)) labels.push('docker');
+            if (/\b(ci|cd|action|workflow|pipeline|release|matrix)\b/.test(text)) labels.push('ci/cd');
+            if (/\b(doc|readme|changelog|comment)\b/.test(text))              labels.push('documentation');
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.payload.issue.number,
+                labels,
+              });
+            }
