@@ -91,7 +91,7 @@ Lines adopted from newer geerlingguy versions are noted with `# From: <repo-url>
 **Registry:** `ghcr.io/${{ github.repository_owner }}/<distro>:<version>`
 **Platforms:** `linux/amd64,linux/arm64` (defined in `env.PLATFORMS`)
 
-Images are pushed on `push` to `main` and `workflow_dispatch`. Pull requests build only (no push).
+Images are pushed on `push` to `master` and `workflow_dispatch`. Pull requests build only (no push).
 BuildKit layer cache is scoped per `distro-version`.
 
 ### Current Matrix

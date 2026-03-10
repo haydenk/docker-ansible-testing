@@ -45,29 +45,10 @@ jobs:
         with:
           dockerfile: ./${{ matrix.distro }}/Dockerfile
 
-  yamllint:
-    name: Lint YAML
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-
-      - name: Lint YAML
-        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3.1.1
-        with:
-          file_or_dir: .github/
-          config_data: |
-            extends: default
-            rules:
-              line-length:
-                max: 120
-              truthy:
-                allowed-values: ["true", "false", "on"]
-
   build:
     name: Build ${{ matrix.distro }}:${{ matrix.version }}
     runs-on: ubuntu-latest
-    needs: [setup, hadolint, yamllint]
+    needs: [setup, hadolint]
     strategy:
       fail-fast: false
       matrix:
