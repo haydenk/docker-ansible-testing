@@ -23,6 +23,7 @@ RUN microdnf -y install rpm dnf dnf-plugins-core \
       python3-pyyaml \
       iproute \
       gnupg2 \
+ && (dnf -y install python39 python39-pip || true) \
  && dnf clean all \
  && rm -f /lib/systemd/system/multi-user.target.wants/* \
           /etc/systemd/system/*.wants/* \
@@ -33,7 +34,8 @@ RUN microdnf -y install rpm dnf dnf-plugins-core \
           /lib/systemd/system/anaconda.target.wants/*
 
 # hadolint ignore=DL3013
-RUN pip3 install --no-cache-dir --upgrade pip $pip_packages \
+RUN python3.9 -m pip install --no-cache-dir --upgrade pip \
+ && python3.9 -m pip install --no-cache-dir $pip_packages \
  && sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers \
  && mkdir -p /etc/ansible \
  && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts

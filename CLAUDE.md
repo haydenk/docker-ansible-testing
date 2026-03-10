@@ -49,8 +49,7 @@ Lines adopted from newer geerlingguy versions are noted with `# From: <repo-url>
 
 **debian**
 - Slim variant available (`-slim` suffix).
-- `--break-system-packages` on both pip upgrade and install (adopted from debian13/trixie).
-- `EXTERNALLY-MANAGED` removed via wildcard in the apt install layer.
+- `EXTERNALLY-MANAGED` removed via wildcard in the apt install layer — no `--break-system-packages` needed (removal happens before pip runs, covers all versions including bullseye).
 
 **ubuntu**
 - No slim variant available.
