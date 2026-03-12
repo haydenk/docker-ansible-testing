@@ -1,0 +1,30 @@
+name: Tag Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  tag:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    name: Create release tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Extract version
+        id: version
+        run: echo "version=${HEAD_REF#release/}" >> "$GITHUB_OUTPUT"
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+
+      - name: Create tag
+        run: |
+          gh api repos/${{ github.repository }}/git/refs \
+            --method POST \
+            -f ref="refs/tags/${{ steps.version.outputs.version }}" \
+            -f sha="${{ github.event.pull_request.merge_commit_sha }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
