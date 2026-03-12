@@ -23,4 +23,6 @@ RUN apk --no-cache add \
  && mkdir -p /etc/ansible \
  && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
 CMD ["/bin/sh"]

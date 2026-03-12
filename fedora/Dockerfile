@@ -32,5 +32,7 @@ RUN pip3 install --no-cache-dir $pip_packages \
  && mkdir -p /etc/ansible \
  && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 CMD ["/usr/sbin/init"]
