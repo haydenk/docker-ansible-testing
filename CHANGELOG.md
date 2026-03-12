@@ -7,6 +7,9 @@ and this project uses date-based versioning: `YYYYMMDD`, `YYYYMMDD.1`, `YYYYMMDD
 
 ## [Unreleased]
 
+
+## [20260311] - 2026-03-11
+
 ### Added
 
 - Initial release of multi-architecture Docker images for Ansible role testing
@@ -20,6 +23,7 @@ and this project uses date-based versioning: `YYYYMMDD`, `YYYYMMDD.1`, `YYYYMMDD
 - Dependabot configured for weekly GitHub Actions updates
 - Issue templates for bug reports, feature requests, and questions
 - Pull request template with gitflow checklist
+- `uv` added to all Dockerfiles for fast Python package management
+- Bumped `hadolint/hadolint-action` from 3.1.0 to 3.3.0
 
-[Unreleased]: https://github.com/haydenk/docker-ansible-testing/compare/20260309...HEAD
-[20260309]: https://github.com/haydenk/docker-ansible-testing/releases/tag/20260309
+[20260311]: https://github.com/haydenk/docker-ansible-testing/releases/tag/20260311
