@@ -21,8 +21,7 @@ RUN apt-get update \
     && apt-get clean
 
 # hadolint ignore=DL3013
-RUN pip3 install --no-cache-dir --upgrade pip \
- && pip3 install --no-cache-dir $pip_packages
+RUN pip3 install --no-cache-dir $pip_packages
 
 RUN mkdir -p /etc/ansible \
  && printf '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts \
